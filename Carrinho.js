@@ -1,57 +1,53 @@
+import { StrategyDiscount } from "./StrategyDiscount.js"
+
+/* @Descriptio: Esta classe tem a função de criar um carrinho de compras
+    com seus respectivos metodos 
+   @Author: Álvaro Damásio
+   @Since: 1.0
+*/
 
 
-class Carrinho {
-     discount = 0
-     products = []
-
-    setDiscount(newDiscount){
-        this.discount = newDiscount
+export class Carrinho {   
+    products = []
+    _discountStrategy  = new StrategyDiscount()
+    
+    setDiscountStrategy(discount ){
+        //especifica qual estrategia de desconto será usada
+        this._discountStrategy = discount
     }
 
-    addProduct(product){
+    addProduct(product ) {
+        //adiciona um produto ao carrimho
         this.products.push(product)
     }
 
     getProducts() {
+        // retorna os produtos que estão no carrinho
         return this.products
     }
 
     getTotal() {
+        //retorna o total do preço do carrinho sem desconto
         return this.products.reduce( (sum, product) => sum + product.price, 0 )
     }
 
-    getTotalWithDiscount() {
-        //Sem utilizar o pattern de strategy
-        const total = this.getTotal()
-
-        if(total >= 100 && total < 200){
-            this.setDiscount(10)
-        }
-        if(total >= 201 && total < 300){
-            this.setDiscount(20)
-        }
-        if(total >= 301 && total < 400){
-            this.setDiscount(30)
-        }
-        if(total >= 401 && total < 500){
-            this.setDiscount(40)
-        }
-        if(total >= 501 && total < 600){
-            this.setDiscount(50)
-        }
-        if(total >= 601 && total < 700){
-            this.setDiscount(60)
-        }
-
-
-        return total - total * (this.discount / 100)
+    getTotalWithDiscount()  {
+        //retorna o total do preço do carrinho com desconto
+        return this._discountStrategy.getDiscount(this)
     }
-}    
 
-const cart = new Carrinho()
-cart.addProduct({name: "sabao", price :35})
-cart.addProduct({name: "pao", price : 500})
-cart.addProduct({name: "shampoo", price :85})
-console.log(cart.getTotal())
+   
+} 
+
+
+
+
+
+
+
+
+
+
+
 
 
